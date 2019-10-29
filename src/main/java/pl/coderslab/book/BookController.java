@@ -2,10 +2,9 @@ package pl.coderslab.book;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import pl.coderslab.ControllerInterface;
 import pl.coderslab.author.Author;
 import pl.coderslab.author.AuthorService;
 import pl.coderslab.publisher.Publisher;
@@ -16,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/books")
-public class BookController {
+public class BookController implements ControllerInterface<Book> {
 
     private final BookService bookService;
     private final PublisherService publisherService;
@@ -29,59 +28,64 @@ public class BookController {
         this.authorService = authorService;
     }
 
-    @GetMapping("/add")
-    @ResponseBody
-    public String add(){
-
-        Publisher publisher = new Publisher();
-        publisher.setName("Publisher 1");
-
-        publisherService.save(publisher);
-
-        Author author = new Author();
-        author.setFirstName("Bruce");
-        author.setLastName("Eckel");
-
-        List<Author> authors = new ArrayList<>();
-        authors.add(author);
-        authors.forEach(a->authorService.save(a));
-
-        Book book = new Book();
-        book.setTitle("Thinking in Java");
-        book.setPublisher(publisher);
-        book.setAuthors(authors);
-
-        bookService.save(book);
-        return "Book added, id = " + book.getId();
+    @GetMapping("/list")
+    public String list(Model model){
+        List<Book> books = bookService.findAll();
+        model.addAttribute("books", books);
+        return "bookList";
     }
 
-    @GetMapping("/update/{id}")
-    @ResponseBody
-    public String update(@PathVariable Long id){
-        Book book = bookService.findOne(id);
-        book.setTitle("Thinking not in Java");
+    @GetMapping("/add")
+    public String add(Model model){
+        model.addAttribute("book", new Book());
+        return "book";
+    }
 
-        bookService.update(book);
-        return "Updated book with id = " + book.getId() + ", new title = " + book.getTitle();
+    @PostMapping("/add")
+    public String add(@ModelAttribute Book book){
+        bookService.save(book);
+        return "redirect:list";
     }
 
     @GetMapping("/delete/{id}")
-    @ResponseBody
-    public String delete(@PathVariable Long id){
+    public String delete(@PathVariable long id){
         bookService.delete(id);
-        return "Deleted book with id = " + id;
+        return "redirect:../list";
     }
 
-    @GetMapping("/find/{id}")
-    @ResponseBody
-    public String find(@PathVariable Long id){
+//    @GetMapping("/find/{id}")
+//    @ResponseBody
+//    public String find(@PathVariable Long id){
+//        Book book = bookService.findOne(id);
+//        if (book != null){
+//            return book.toString();
+//        }
+//        return "Book not found";
+//    }
+
+    @GetMapping("/update/{id}")
+    public String update(@PathVariable long id,
+                         Model model){
         Book book = bookService.findOne(id);
-        if (book != null){
-            return book.toString();
-        }
-        return "Book not found";
+        model.addAttribute("book", book);
+        return "book";
+    }
+
+    @PostMapping("/update/{id}")
+    public String update(@ModelAttribute Book book){
+        bookService.update(book);
+        return "redirect:../list";
     }
 
 
+    @ModelAttribute("publishers")
+    public List<Publisher> getPublishers(){
+        return publisherService.findAll();
+    }
+
+    @ModelAttribute("authors")
+    public List<Author> getAuthors() {
+        return authorService.findAll();
+    }
 
 }
