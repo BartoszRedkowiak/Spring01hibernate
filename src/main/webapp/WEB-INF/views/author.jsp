@@ -2,23 +2,28 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Person</title>
+    <title>Add Author</title>
 </head>
 <body>
 
 <jsp:include page="menu.jsp"/>
 
-<form:form action="/persons/add" method="post" modelAttribute="person">
-    <label>Login
-        <form:input path="login"/>
+<form:form method="post" modelAttribute="author">
+
+    <label>First name:
+        <form:input type="text" path="firstName"/>
     </label>
-    <label>Password
-        <form:password path="password"/>
+
+    <br><br>
+
+    <label>Last name:
+        <form:input type="text" path="lastName"/>
     </label>
-    <label>Email
-        <form:input path="email"/>
-    </label>
+
+    <br><br>
+
     <input type="submit" value="Save">
+
 </form:form>
 
 </body>

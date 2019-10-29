@@ -53,20 +53,10 @@ public class BookController implements ControllerInterface<Book> {
         return "redirect:../list";
     }
 
-//    @GetMapping("/find/{id}")
-//    @ResponseBody
-//    public String find(@PathVariable Long id){
-//        Book book = bookService.findOne(id);
-//        if (book != null){
-//            return book.toString();
-//        }
-//        return "Book not found";
-//    }
-
     @GetMapping("/update/{id}")
     public String update(@PathVariable long id,
                          Model model){
-        Book book = bookService.findOne(id);
+        Book book = bookService.findBookWithAuthors(id);
         model.addAttribute("book", book);
         return "book";
     }
@@ -76,7 +66,6 @@ public class BookController implements ControllerInterface<Book> {
         bookService.update(book);
         return "redirect:../list";
     }
-
 
     @ModelAttribute("publishers")
     public List<Publisher> getPublishers(){

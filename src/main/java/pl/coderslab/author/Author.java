@@ -15,10 +15,7 @@ public class Author {
     private String firstName;
     private String lastName;
 
-    @ManyToMany
-    @JoinTable(name = "books_authors",
-    joinColumns = @JoinColumn(name = "author_id"),
-    inverseJoinColumns = @JoinColumn(name = "book_id"))
+    @ManyToMany(mappedBy = "authors")
     private List<Book> books;
 
     public long getId() {
@@ -51,5 +48,9 @@ public class Author {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    public String getFullName(){
+        return this.getFirstName() + " " + this.getLastName();
     }
 }

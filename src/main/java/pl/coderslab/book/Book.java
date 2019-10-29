@@ -17,7 +17,10 @@ public class Book {
     private int rating;
     private String description;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany
+    @JoinTable(name = "books_authors",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
     private List<Author> authors;
 
     @ManyToOne

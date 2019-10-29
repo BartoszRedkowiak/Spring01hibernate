@@ -1,8 +1,10 @@
 package pl.coderslab.publisher;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.coderslab.author.Author;
 
 import java.util.List;
 
@@ -30,10 +32,19 @@ public class PublisherService {
     }
 
     public void delete(Long id){
+
         publisherDao.delete(id);
     }
 
     public List<Publisher> findAll(){
         return publisherDao.findAll();
+    }
+
+    public List<Publisher> findAllWithBooks(){
+        List<Publisher> publishers = publisherDao.findAll();
+        for (Publisher publisher : publishers) {
+            Hibernate.initialize(publisher.getBooks());
+        }
+        return publishers;
     }
 }

@@ -1,0 +1,1 @@
+Zamiana adnotacji @ManyToMany w book i authors naprawiła problem dodawania rekordów w book_authors

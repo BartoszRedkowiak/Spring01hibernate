@@ -13,6 +13,8 @@
 </head>
 <body>
 
+<jsp:include page="menu.jsp"/>
+
 <table border="1">
     <thead>
         <tr>
