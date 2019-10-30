@@ -1,8 +1,12 @@
 package pl.coderslab.author;
 
+import org.hibernate.validator.constraints.pl.PESEL;
 import pl.coderslab.book.Book;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Entity
@@ -12,11 +16,21 @@ public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @NotBlank
     private String firstName;
+
+    @NotBlank
     private String lastName;
 
     @ManyToMany(mappedBy = "authors")
     private List<Book> books;
+
+    @PESEL
+    private String pesel;
+
+    @Email
+    private String email;
 
     public long getId() {
         return id;
