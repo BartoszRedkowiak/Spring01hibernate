@@ -1,6 +1,7 @@
 package pl.coderslab;
 
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 public interface ControllerInterface <T> {
 
@@ -8,12 +9,12 @@ public interface ControllerInterface <T> {
 
     public String add(Model model);
 
-    public String add(T t);
+    public String add(T t, BindingResult result);
 
     public String delete(long id);
 
     public String update(long id, Model model);
 
-    public String update(T t);
+    public String update(T t, BindingResult result);
 
 }

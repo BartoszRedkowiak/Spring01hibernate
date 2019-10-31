@@ -3,9 +3,11 @@ package pl.coderslab.publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.ControllerInterface;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -36,7 +38,10 @@ public class PublisherController implements ControllerInterface<Publisher> {
 
     @Override
     @PostMapping("/add")
-    public String add(Publisher publisher) {
+    public String add(@Valid Publisher publisher, BindingResult result) {
+        if (result.hasErrors()){
+            return "publisher";
+        }
         publisherService.save(publisher);
         return "redirect:list";
     }
@@ -59,7 +64,10 @@ public class PublisherController implements ControllerInterface<Publisher> {
 
     @Override
     @PostMapping("/update/{id}")
-    public String update(@ModelAttribute Publisher publisher) {
+    public String update(@Valid @ModelAttribute Publisher publisher, BindingResult result) {
+        if (result.hasErrors()){
+            return "publisher";
+        }
         publisherService.update(publisher);
         return "redirect:../list";
     }

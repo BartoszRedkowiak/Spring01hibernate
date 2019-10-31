@@ -33,14 +33,16 @@ public class BookDao {
         }
     }
 
-    public List<Book> findAll(){
-        Query query = entityManager.createQuery("SELECT b FROM Book b");
+    public List<Book> findAll(boolean isProposition){
+        Query query = entityManager.createQuery("SELECT b FROM Book b where b.proposition = :prop");
+        query.setParameter("prop", isProposition);
         return query.getResultList();
     }
 
-    public List<Book> getRatingList(int rating){
-        Query query = entityManager.createQuery("SELECT b FROM Book b WHERE b.rating = :rating");
+    public List<Book> getRatingList(int rating, boolean isProposition){
+        Query query = entityManager.createQuery("SELECT b FROM Book b WHERE b.rating = :rating and b.proposition = :prop");
         query.setParameter("rating", rating );
+        query.setParameter("prop", isProposition );
         return query.getResultList();
 
     }

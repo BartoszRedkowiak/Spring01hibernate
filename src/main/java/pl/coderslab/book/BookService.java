@@ -34,8 +34,8 @@ public class BookService {
         bookDao.delete(id);
     }
 
-    public List<Book> findAll(){
-        return bookDao.findAll();
+    public List<Book> findAll(boolean isProposition){
+        return bookDao.findAll(isProposition);
     }
 
     public Book findBookWithAuthors(Long id) {

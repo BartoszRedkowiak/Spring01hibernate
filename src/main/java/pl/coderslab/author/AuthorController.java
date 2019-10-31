@@ -2,11 +2,13 @@ package pl.coderslab.author;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.ControllerInterface;
 import pl.coderslab.book.Book;
 import pl.coderslab.book.BookService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -39,7 +41,10 @@ public class AuthorController implements ControllerInterface<Author> {
 
     @Override
     @PostMapping("/add")
-    public String add(Author author) {
+    public String add(@Valid Author author, BindingResult result) {
+        if (result.hasErrors()){
+            return "author";
+        }
         authorService.save(author);
         return "redirect:list";
     }
@@ -62,14 +67,17 @@ public class AuthorController implements ControllerInterface<Author> {
 
     @Override
     @PostMapping("/update/{id}")
-    public String update(@ModelAttribute Author author) {
+    public String update(@Valid @ModelAttribute Author author, BindingResult result) {
+        if (result.hasErrors()){
+            return "author";
+        }
         authorService.update(author);
         return "redirect:../list";
     }
 
     @ModelAttribute("books")
     public List<Book> getBooks(){
-        return bookService.findAll();
+        return bookService.findAll(false);
     }
 
 

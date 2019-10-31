@@ -12,21 +12,21 @@ import pl.coderslab.author.AuthorService;
 import pl.coderslab.publisher.Publisher;
 import pl.coderslab.publisher.PublisherService;
 import pl.coderslab.validate.ValidationBook;
+import pl.coderslab.validate.ValidationProposition;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/books")
-public class BookController implements ControllerInterface<Book> {
+@RequestMapping("/propositions")
+public class PropositionController implements ControllerInterface<Book> {
 
     private final BookService bookService;
     private final PublisherService publisherService;
     private final AuthorService authorService;
 
     @Autowired
-    public BookController(BookService bookService, PublisherService publisherService, AuthorService authorService) {
+    public PropositionController(BookService bookService, PublisherService publisherService, AuthorService authorService) {
         this.bookService = bookService;
         this.publisherService = publisherService;
         this.authorService = authorService;
@@ -34,9 +34,9 @@ public class BookController implements ControllerInterface<Book> {
 
     @GetMapping("/list")
     public String list(Model model){
-        List<Book> books = bookService.findAll(false);
-        model.addAttribute("books", books);
-        return "bookList";
+        List<Book> props = bookService.findAll(true);
+        model.addAttribute("props", props);
+        return "propList";
     }
 
     @GetMapping("/add")
@@ -46,14 +46,14 @@ public class BookController implements ControllerInterface<Book> {
     }
 
     @PostMapping("/add")
-    public String add(@Validated({ValidationBook.class})
-                      @ModelAttribute Book book,
+    public String add(@Validated({ValidationProposition.class})
+                      @ModelAttribute Book proposition,
                       BindingResult result){
         if (result.hasErrors()){
             return "book";
         }
-        book.setProposition(false);
-        bookService.save(book);
+        proposition.setProposition(true);
+        bookService.save(proposition);
         return "redirect:list";
     }
 
@@ -66,13 +66,13 @@ public class BookController implements ControllerInterface<Book> {
     @GetMapping("/update/{id}")
     public String update(@PathVariable long id,
                          Model model){
-        Book book = bookService.findBookWithAuthors(id);
-        model.addAttribute("book", book);
+        Book proposition = bookService.findBookWithAuthors(id);
+        model.addAttribute("book", proposition);
         return "book";
     }
 
     @PostMapping("/update/{id}")
-    public String update(@Validated({ValidationBook.class})
+    public String update(@Validated({ValidationProposition.class})
                          @ModelAttribute Book book,
                          BindingResult result){
         if (result.hasErrors()){

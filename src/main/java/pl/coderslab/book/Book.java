@@ -3,12 +3,11 @@ package pl.coderslab.book;
 import org.hibernate.validator.constraints.Range;
 import pl.coderslab.author.Author;
 import pl.coderslab.publisher.Publisher;
+import pl.coderslab.validate.ValidationBook;
+import pl.coderslab.validate.ValidationProposition;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Entity
@@ -20,20 +19,20 @@ public class Book {
     private Long id;
 
     @NotNull
-
-    @Size(min = 5)
+    @Size(min = 5, groups = {ValidationBook.class, ValidationProposition.class})
     private String title;
 
-    @Range(min = 1, max = 10)
+    @Range(min = 1, max = 10, groups = {ValidationBook.class})
     private int rating;
 
-    @Min(2)
+    @Min(value = 2, groups = {ValidationBook.class})
     private int pages;
 
-    @Size(max = 600)
+    @NotBlank(groups = {ValidationProposition.class})
+    @Size(max = 600, groups = {ValidationBook.class, ValidationProposition.class})
     private String description;
 
-    @NotEmpty
+    @NotEmpty(groups = {ValidationBook.class})
     @ManyToMany
     @JoinTable(name = "books_authors",
             joinColumns = @JoinColumn(name = "book_id"),
@@ -41,8 +40,10 @@ public class Book {
     private List<Author> authors;
 
     @ManyToOne
-    @NotNull
+    @NotNull(groups = {ValidationBook.class})
     private Publisher publisher;
+
+    private boolean proposition;
 
     public Long getId() {
         return id;
@@ -100,15 +101,12 @@ public class Book {
         this.pages = pages;
     }
 
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", authors='" + authors + '\'' +
-                ", rating=" + rating +
-                ", publisher='" + publisher + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+    public boolean isProposition() {
+        return proposition;
     }
+
+    public void setProposition(boolean proposition) {
+        this.proposition = proposition;
+    }
+
 }

@@ -23,9 +23,11 @@ public class Publisher {
     private List<Book> books;
 
     @NIP
+    @Column(unique = true)
     private String nip;
 
     @REGON
+    @Column(unique = true)
     private String regon;
 
     public long getId() {
@@ -50,5 +52,21 @@ public class Publisher {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    public String getNip() {
+        return nip;
+    }
+
+    public void setNip(String nip) {
+        this.nip = nip;
+    }
+
+    public String getRegon() {
+        return regon;
+    }
+
+    public void setRegon(String regon) {
+        this.regon = regon;
     }
 }

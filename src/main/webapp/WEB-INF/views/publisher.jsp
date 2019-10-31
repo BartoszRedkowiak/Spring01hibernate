@@ -12,6 +12,21 @@
 
     <label>Name:
         <form:input type="text" path="name"/>
+        <form:errors path="name" cssStyle="color: red"/>
+    </label>
+
+    <br><br>
+
+    <label>Nip:
+        <form:input path="nip" type="text"/>
+        <form:errors path="nip" cssStyle="color: red"/>
+    </label>
+
+    <br><br>
+
+    <label>Regon:
+        <form:input path="regon" type="text"/>
+        <form:errors path="regon" cssStyle="color: red"/>
     </label>
 
     <input type="submit" value="Save">

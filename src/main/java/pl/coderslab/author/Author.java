@@ -2,6 +2,7 @@ package pl.coderslab.author;
 
 import org.hibernate.validator.constraints.pl.PESEL;
 import pl.coderslab.book.Book;
+import pl.coderslab.validate.Age;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -27,10 +28,15 @@ public class Author {
     private List<Book> books;
 
     @PESEL
+    @Column(unique = true)
     private String pesel;
 
     @Email
+    @Column(unique = true)
     private String email;
+
+    @Age(min = 18)
+    private Integer yearOfBirth;
 
     public long getId() {
         return id;
@@ -66,5 +72,29 @@ public class Author {
 
     public String getFullName(){
         return this.getFirstName() + " " + this.getLastName();
+    }
+
+    public String getPesel() {
+        return pesel;
+    }
+
+    public void setPesel(String pesel) {
+        this.pesel = pesel;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Integer getYearOfBirth() {
+        return yearOfBirth;
+    }
+
+    public void setYearOfBirth(Integer yearOfBirth) {
+        this.yearOfBirth = yearOfBirth;
     }
 }
